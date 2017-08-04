@@ -9,6 +9,8 @@ iOS 图片轮播
 ![image](https://raw.githubusercontent.com/Mill0/XHCarouselPicture/master/1.gif) 
 
 
+## Usage 使用方法
+```objc
     NSArray *arr3 = @[@"http://pic39.nipic.com/20140226/18071023_162553457000_2.jpg", [UIImage imageNamed:@"2.jpg"], @"http://hiphotos.baidu.com/praisejesus/pic/item/e8df7df89fac869eb68f316d.jpg", [UIImage imageNamed:@"1.jpg"]];
 
     NSArray *describeArray = @[@"这是第一张图片的描述", @"这是第二张图片的描述", @"这是第三张图片的描述", @"这是第四张图片的描述"];
@@ -38,4 +40,4 @@ iOS 图片轮播
     _carouselView.desLabelTextColor = [UIColor whiteColor];
 
     [self.view addSubview:self.carouselView];
-
+```
