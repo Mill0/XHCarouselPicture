@@ -1,5 +1,5 @@
 
-![](https://img.shields.io/badge/platform-iOS-red.svg)   ![](https://img.shields.io/badge/language-Objective--C%2FSwift%203.0-orange.svg) ![](https://img.shields.io/cocoapods/v/PPBadgeView.svg?style=flat) ![](https://img.shields.io/badge/license-MIT%20License-brightgreen.svg)
+![](https://img.shields.io/badge/platform-iOS-red.svg)   ![](https://img.shields.io/badge/language-Objective--C%2FSwift%203.0-orange.svg) ![](https://img.shields.io/badge/license-MIT%20License-brightgreen.svg)
 
 XHCarouselPicture
 iOS 图片轮播
