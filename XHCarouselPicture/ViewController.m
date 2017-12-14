@@ -92,26 +92,15 @@
 - (void)addThreeCarouselViewWithImageArray:(NSArray *)imageA describeArray:(NSArray *)describeArray
 {
     self.carouselPictureView = [XHCarouselPictureView carouselViewWithImageArray:imageA describeArray:describeArray];
+    
     self.carouselPictureView.frame = CGRectMake(0, 550, [UIScreen mainScreen].bounds.size.width, 260);
+    
     self.carouselPictureView.imageClickBlock = ^(NSInteger clickIndex) {
         NSLog(@"第 %ld 张图片被点击", (long)clickIndex);
     };
+    
     //设置每张图片的停留时间
     self.carouselPictureView.switchTime = 2.5;
-    
-    //设置分页控件的图片,不设置则为系统默认
-    //        [_carouselView setPageImage:[UIImage imageNamed:@"other"] andCurrentImage:[UIImage imageNamed:@"current"]];
-    
-    //设置分页控件的位置，默认为PositionBottomCenter
-    self.carouselPictureView.pagePosition = PositionBottomCenter;
-    
-    //设置背景颜色，默认为黑色半透明
-    self.carouselPictureView.desLabelBackgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.3];
-    
-    //设置字体，默认为13号字体
-    self.carouselPictureView.desLabelFont = [UIFont systemFontOfSize:15];
-    //设置文字颜色，默认为白色
-    self.carouselPictureView.desLabelTextColor = [UIColor whiteColor];
     
     [self.view addSubview:self.carouselPictureView];
     

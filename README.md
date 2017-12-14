@@ -50,3 +50,19 @@
 ```
 
 
+```objc
+    self.carouselPictureView = [XHCarouselPictureView carouselViewWithImageArray:imageA describeArray:describeArray];
+    
+    self.carouselPictureView.frame = CGRectMake(0, 550, [UIScreen mainScreen].bounds.size.width, 260);
+    
+    self.carouselPictureView.imageClickBlock = ^(NSInteger clickIndex) {
+        NSLog(@"第 %ld 张图片被点击", (long)clickIndex);
+    };
+    
+    //设置每张图片的停留时间
+    self.carouselPictureView.switchTime = 2.5;
+    
+    [self.view addSubview:self.carouselPictureView];
+
+```
+
