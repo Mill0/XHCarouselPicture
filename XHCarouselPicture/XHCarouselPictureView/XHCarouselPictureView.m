@@ -22,8 +22,6 @@
 
 @property (nonatomic, strong) UILabel *describeLabel; //图片描述控件，默认在底部
 
-@property (nonatomic, strong) UIView *mButtomView;  // 底部视图
-
 @property (nonatomic, strong) UIPageControl *pageControl; //分页控件
 
 @property (nonatomic, strong) UIImageView *currImageView; //显示的imageView
@@ -80,16 +78,30 @@
     return [[self alloc] initWithFrame:CGRectZero carouselViewWithImageArray:imageArray describeArray:describeArray ClickBlock:(ClickBlock)aBlock];
 }
 
++ (instancetype)carouselViewWithImageArray:(NSArray *)imageArray describeArray:(NSArray *)describeArray
+{
+    return [[self alloc] initWithFrame:CGRectZero carouselViewWithImageArray:imageArray describeArray:describeArray ClickBlock:nil];
+}
+
 #pragma mark- --------设置相关方法--------
 #pragma mark 设置控件的frame，并添加子控件
 - (void)setFrame:(CGRect)frame {
     [super setFrame:frame];
-    
     [self addSubview:self.scrollView];
+    [self addSubview:self.describeLabel];
+    [self addSubview:self.pageControl];
+}
+
+#pragma mark 布局子控件
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    //有导航控制器时，会默认在scrollview上方添加64的内边距，这里强制设置为0
+    _scrollView.contentInset = UIEdgeInsetsZero;
     
-    [self addSubview:self.mButtomView];
-    [self.mButtomView addSubview:self.describeLabel];
-    [self.mButtomView addSubview:self.pageControl];
+    _scrollView.frame = self.bounds;
+    _describeLabel.frame = CGRectMake(0, scHeight - 20, scWith, 20);
+    [self setPageControlPosition];
+    [self setScrollViewContentSize];
 }
 
 #pragma mark 设置图片数组
@@ -153,10 +165,8 @@
         _scrollView.delegate = self;
         [_scrollView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imageClick)]];
         _currImageView = [[UIImageView alloc] init];
-//        _currImageView.contentMode = UIViewContentModeScaleAspectFill;
         [_scrollView addSubview:_currImageView];
         _otherImageView = [[UIImageView alloc] init];
-//        _otherImageView.contentMode = UIViewContentModeScaleAspectFill;
         [_scrollView addSubview:_otherImageView];
     }
     return _scrollView;
@@ -165,24 +175,15 @@
 - (UILabel *)describeLabel {
     if (!_describeLabel) {
         _describeLabel = [[UILabel alloc] init];
-        _describeLabel.backgroundColor = [UIColor clearColor];
+        _describeLabel.backgroundColor = [UIColor colorWithWhite:0 alpha:0.5];
         _describeLabel.textColor = [UIColor whiteColor];
-        _describeLabel.textAlignment = NSTextAlignmentLeft;
+        _describeLabel.textAlignment = NSTextAlignmentCenter;
         _describeLabel.font = [UIFont systemFontOfSize:13];
         _describeLabel.hidden = YES;
     }
     return _describeLabel;
 }
 
-- (UIView *)mButtomView
-{
-    if (!_mButtomView) {
-        _mButtomView = [[UIView alloc] init];
-        _mButtomView.backgroundColor = [UIColor colorWithWhite:0 alpha:0.3];
-    }
-    
-    return _mButtomView;
-}
 
 - (UIPageControl *)pageControl {
     if (!_pageControl) {
@@ -197,9 +198,8 @@
 //设置背景颜色
 - (void)setDesLabelBackgroundColor:(UIColor *)desLabelBackgroundColor {
     _desLabelBackgroundColor = desLabelBackgroundColor;
-    self.mButtomView.backgroundColor = desLabelBackgroundColor;
+    self.describeLabel.backgroundColor = desLabelBackgroundColor;
 }
-
 
 //设置字体
 - (void)setDesLabelFont:(UIFont *)desLabelFont {
@@ -253,13 +253,13 @@
     _pageControl.frame = CGRectMake(0, 0, size.width, size.height);
     
     if (_pagePosition == PositionNone || _pagePosition == PositionBottomCenter)
-        _pageControl.center = CGPointMake(scWith * 0.5, 40 - (40 - size.height * 0.5) * 0.5);
+        _pageControl.center = CGPointMake(scWith * 0.5, scHeight - (_describeLabel.hidden? 10 : 30));
     else if (_pagePosition == PositionTopCenter)
-        _pageControl.center = CGPointMake(scWith * 0.5, 20);
+        _pageControl.center = CGPointMake(scWith * 0.5, size.height * 0.5);
     else if (_pagePosition == PositionBottomLeft)
-        _pageControl.frame = CGRectMake(Margin, (40 - size.height) * 0.5, size.width, size.height);
+        _pageControl.frame = CGRectMake(Margin, scHeight - (_describeLabel.hidden? size.height : size.height + 20), size.width, size.height);
     else
-        _pageControl.frame = CGRectMake(scWith - Margin - size.width, (40 - size.height) * 0.5, size.width, size.height);
+        _pageControl.frame = CGRectMake(scWith - Margin - size.width, scHeight - (_describeLabel.hidden? size.height : size.height + 20), size.width, size.height);
 }
 
 #pragma mark- --------定时器相关方法--------
@@ -281,20 +281,6 @@
     [self.scrollView setContentOffset:CGPointMake(scWith * 3, 0) animated:YES];
 }
 
-#pragma mark 布局子控件
-- (void)layoutSubviews {
-    [super layoutSubviews];
-    //有导航控制器时，会默认在scrollview上方添加64的内边距，这里强制设置为0
-    _scrollView.contentInset = UIEdgeInsetsZero;
-    
-    _scrollView.frame = self.bounds;
-    
-    _mButtomView.frame = CGRectMake(0, scHeight - 40, scWith, 40);
-    _describeLabel.frame = CGRectMake(10, 0, scWith - 10, 40);
-    [self setPageControlPosition];
-    [self setScrollViewContentSize];
-}
-
 #pragma mark 设置scrollView的contentSize
 - (void)setScrollViewContentSize {
     if (_images.count > 1) {
@@ -313,7 +299,13 @@
 
 #pragma mark 图片点击事件
 - (void)imageClick {
+    
+    if (self.imageClickBlock) {
+        self.imageClickBlock(self.currIndex);
+    } else {
         self.clickBlock(self.currIndex);
+    }
+    
 }
 
 #pragma mark 下载网络图片
@@ -402,3 +394,4 @@
     }
 }
 @end
+

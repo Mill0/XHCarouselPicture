@@ -27,7 +27,8 @@
     NSArray *describeArray = @[@"这是第一张图片的描述", @"这是第二张图片的描述", @"这是第三张图片的描述", @"这是第四张图片的描述"];
     
     [self addCarouselViewWithImageArray:arr3 describeArray:describeArray];
-    [self addTwoCarouselViewWithImageArray:arr3 describeArray:describeArray];
+    [self addTwoCarouselViewWithImageArray:arr3 describeArray:nil];
+    [self addThreeCarouselViewWithImageArray:arr3 describeArray:nil];
     
 }
 
@@ -64,7 +65,7 @@
 
 - (void)addTwoCarouselViewWithImageArray:(NSArray *)imageA describeArray:(NSArray *)describeArray
 {
-    _carouselPictureTwoView = [[XHCarouselPictureView alloc] initWithFrame:CGRectMake(0, 320, [UIScreen mainScreen].bounds.size.width, 260) carouselViewWithImageArray:imageA describeArray:nil ClickBlock:^(NSInteger clickIndex) {
+    _carouselPictureTwoView = [[XHCarouselPictureView alloc] initWithFrame:CGRectMake(0, 290, [UIScreen mainScreen].bounds.size.width, 260) carouselViewWithImageArray:imageA describeArray:describeArray ClickBlock:^(NSInteger clickIndex) {
         NSLog(@"点击的图片：%ld", (long)clickIndex);
     }];
     
@@ -87,4 +88,34 @@
     
     [self.view addSubview:_carouselPictureTwoView];
 }
+
+- (void)addThreeCarouselViewWithImageArray:(NSArray *)imageA describeArray:(NSArray *)describeArray
+{
+    self.carouselPictureView = [XHCarouselPictureView carouselViewWithImageArray:imageA describeArray:describeArray];
+    self.carouselPictureView.frame = CGRectMake(0, 550, [UIScreen mainScreen].bounds.size.width, 260);
+    self.carouselPictureView.imageClickBlock = ^(NSInteger clickIndex) {
+        NSLog(@"第 %ld 张图片被点击", (long)clickIndex);
+    };
+    //设置每张图片的停留时间
+    self.carouselPictureView.switchTime = 2.5;
+    
+    //设置分页控件的图片,不设置则为系统默认
+    //        [_carouselView setPageImage:[UIImage imageNamed:@"other"] andCurrentImage:[UIImage imageNamed:@"current"]];
+    
+    //设置分页控件的位置，默认为PositionBottomCenter
+    self.carouselPictureView.pagePosition = PositionBottomCenter;
+    
+    //设置背景颜色，默认为黑色半透明
+    self.carouselPictureView.desLabelBackgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.3];
+    
+    //设置字体，默认为13号字体
+    self.carouselPictureView.desLabelFont = [UIFont systemFontOfSize:15];
+    //设置文字颜色，默认为白色
+    self.carouselPictureView.desLabelTextColor = [UIColor whiteColor];
+    
+    [self.view addSubview:self.carouselPictureView];
+    
+}
 @end
+
+
