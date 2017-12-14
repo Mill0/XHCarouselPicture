@@ -11,6 +11,7 @@
 
 
 ## Usage 使用方法
+ ###方法一:
 ```objc
     NSArray *arr3 = @[@"http://pic39.nipic.com/20140226/18071023_162553457000_2.jpg",
      [UIImage imageNamed:@"2.jpg"], 
@@ -50,6 +51,7 @@
 ```
 
 
+ ###方法二:
 ```objc
     self.carouselPictureView = [XHCarouselPictureView carouselViewWithImageArray:imageA describeArray:describeArray];
     
