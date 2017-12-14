@@ -23,7 +23,10 @@
      @"这是第三张图片的描述", 
      @"这是第四张图片的描述"];
 
-    self.carouselView = [[XHCarouselPictureView alloc] initWithFrame:CGRectMake(0, 30, [UIScreen mainScreen].bounds.size.width, 260) carouselViewWithImageArray:arr3 describeArray:describeArray ClickBlock:^(NSInteger clickIndex) {
+    self.carouselView = [[XHCarouselPictureView alloc] initWithFrame:CGRectMake(0, 30, [UIScreen mainScreen].bounds.size.width, 260) 
+    carouselViewWithImageArray:arr3 
+    describeArray:describeArray 
+    ClickBlock:^(NSInteger clickIndex) {
 
         NSLog(@"点击的图片：%ld", (long)clickIndex);
 
